@@ -1,0 +1,261 @@
+    
+1)	Crear una base de datos llamada call_list
+
+	CREATE DATABASE call_list;
+
+
+                                              Listado de base de datos
+     Nombre     |  Due±o   | Codificaci¾n |          Collate           |           Ctype            |      Privilegios  
+----------------+----------+--------------+----------------------------+----------------------------+-----------------------
+ call_list      | postgres | UTF8         | Spanish_Latin America.1252 | Spanish_Latin America.1252 |
+ dell           | postgres | UTF8         | Spanish_Latin America.1252 | Spanish_Latin America.1252 |
+ guru99         | postgres | UTF8         | Spanish_Latin America.1252 | Spanish_Latin America.1252 |
+ postgres       | postgres | UTF8         | Spanish_Latin America.1252 | Spanish_Latin America.1252 |
+ prueba1        | postgres | UTF8         | Spanish_Latin America.1252 | Spanish_Latin America.1252 |
+ template0      | postgres | UTF8         | Spanish_Latin America.1252 | Spanish_Latin America.1252 | =c/postgres          +
+                |          |              |                            |                            | postgres=CTc/postgres
+ template1      | postgres | UTF8         | Spanish_Latin America.1252 | Spanish_Latin America.1252 | =c/postgres          +
+                |          |              |                            |                            | postgres=CTc/postgres
+ video_bootcamp | postgres | UTF8         | Spanish_Latin America.1252 | Spanish_Latin America.1252 |
+(8 filas)
+
+2)	 En la base de datos recien creada crear la tabla users con los campos id (clave primaria), first_name, email. 
+
+CREATE TABLE users ( id SERIAL PRIMARY KEY, first_name VARCHAR(20), email VARCHAR(20));
+
+
+3)	Ingresar un usuario, llamado Carlos (el resto de los datos deben inventarlos). 
+
+	INSERT INTO users (first_name, email) VALUES ('Carlos', 'carlos2@gmail.com');
+
+call_list=# SELECT * FROM users;
+ id | first_name |        email         
+----+------------+----------------------
+  1 | Emerson    | emer_123_2@gmail.com
+  2 | Andrea     | chinla2@gmail.com    
+  3 | Adel       | adel@gmail.com       
+  4 | Carlos     | carlos2@gmail.com    
+(4 filas)
+
+4)	Ingresar un usuario, llamada Laura (el resto de los datos deben inventarlos). 
+
+
+INSERT INTO users (first_name, email) VALUES ('Laura', 'laura@gmail.com');
+
+call_list=# SELECT * FROM users;
+ id | first_name |        email         
+----+------------+----------------------
+  1 | Emerson    | emer_123_2@gmail.com 
+  2 | Andrea     | chinla2@gmail.com   
+  3 | Adel       | adel@gmail.com       
+  4 | Carlos     | carlos2@gmail.com    
+  5 | Laura      | laura@gmail.com      
+(5 filas)
+
+5)	Crear una tabla llamada calls con los campos id (clave primaria), phone, date, user_id (foreign key relacionado a users) y length (para guardar la duración de la llamada) como un número entero. 
+
+CREATE TABLE calls ( id SERIAL PRIMARY KEY, phone VARCHAR(20), date DATE, user_id INTEGER REFERENCES users(id), lenght INTEGER);
+
+
+call_list=# SELECT * FROM calls;
+
+ id |    phone     |    date    | user_id | lenght
+----+--------------+------------+---------+--------
+
+
+6)	Agregar a la tabla users el campo last_name. 
+
+ALTER TABLE users ADD COLUMN last_name VARCHAR(20);
+
+SELECT * FROM users;
+
+ id | first_name |        email         | last_name
+----+------------+----------------------+-----------
+  1 | Emerson    | emer_123_2@gmail.com | Espinoza
+  2 | Andrea     | chinla2@gmail.com    | Villareal
+  3 | Adel       | adel@gmail.com       | carrera
+  4 | Carlos     | carlos2@gmail.com    |
+  5 | Laura      | laura@gmail.com      |
+(5 filas)
+
+7)	 Modelar la base de datos (agregar print de pantalla [utilizar https://www.draw.io/]).
+
+UPDATE users SET last_name = 'Perez' WHERE id = 1;
+
+call_list=# SELECT * FROM users;
+
+ id | first_name |        email         | last_name
+----+------------+----------------------+-----------
+  2 | Andrea     | chinla2@gmail.com    | Villareal
+  3 | Adel       | adel@gmail.com       | carrera
+  4 | Carlos     | carlos2@gmail.com    |
+  5 | Laura      | laura@gmail.com      |
+  1 | Emerson    | emer_123_2@gmail.com | Perez
+(5 filas)
+
+8)	 Ingresar el apellido del usuario Carlos. Ingresar el apellido del usuario Laura.
+
+UPDATE users SET last_name = 'Jara' WHERE id = 2;
+
+call_list=# SELECT * FROM users;
+
+ id | first_name |        email         | last_name
+----+------------+----------------------+-----------
+  3 | Adel       | adel@gmail.com       | carrera
+  4 | Carlos     | carlos2@gmail.com    |
+  1 | Emerson    | emer_123_2@gmail.com | Perez
+  2 | Andrea     | chinla2@gmail.com    | laura
+  5 | Laura      | laura@gmail.com      | Jara
+(5 filas)
+
+
+9)	 Ingresar 6 llamadas asociadas al usuario Laura. Ingresar 4 llamadas asociadas al usuario Carlos.
+
+INSERT INTO calls (phone, date, user_id, lenght) VALUES ('+56986323803', NOW(), 2, 130);
+INSERT INTO calls (phone, date, user_id, lenght) VALUES ('+56986323804', NOW(), 2,  30);
+INSERT INTO calls (phone, date, user_id, lenght) VALUES ('+56986323805', NOW(), 2, 86);
+INSERT INTO calls (phone, date, user_id, lenght) VALUES ('+56986323806', NOW(), 2, 46);
+INSERT INTO calls (phone, date, user_id, lenght) VALUES ('+56986323807', NOW(), 2, 60);
+INSERT INTO calls (phone, date, user_id, lenght) VALUES ('+56986323808', NOW(), 2, 60);
+
+
+call_list=# SELECT * FROM calls;
+ id |    phone     |    date    | user_id | lenght
+----+--------------+------------+---------+--------
+  1 | +56986323803 | 2019-10-06 |       2 |    130
+  2 | +56986323804 | 2019-10-06 |       2 |     30
+  3 | +56986323805 | 2019-10-06 |       2 |     40
+  4 | +56986323806 | 2019-10-06 |       2 |     86
+  5 | +56986323807 | 2019-10-06 |       2 |     46
+  6 | +56986323808 | 2019-10-06 |       2 |     60
+
+(10 filas)
+
+10)	Ingresar 4 llamadas asociadas al usuario Carlos.
+
+INSERT INTO calls (phone, date, user_id, lenght) VALUES ('+56986302803', NOW(), 4, 11);
+INSERT INTO calls (phone, date, user_id, lenght) VALUES ('+56986302804', NOW(), 4, 12);
+INSERT INTO calls (phone, date, user_id, lenght) VALUES ('+56986302805', NOW(), 4, 7);
+INSERT INTO calls (phone, date, user_id, lenght) VALUES ('+56986302806', NOW(), 4, 16);
+
+SELECT * FROM calls;
+
+call_list=# SELECT * FROM calls;
+ id |    phone     |    date    | user_id | lenght
+----+--------------+------------+---------+--------
+  1 | +56986323803 | 2019-10-06 |       2 |    130
+  2 | +56986323804 | 2019-10-06 |       2 |     30
+  3 | +56986323805 | 2019-10-06 |       2 |     40
+  4 | +56986323806 | 2019-10-06 |       2 |     86
+  5 | +56986323807 | 2019-10-06 |       2 |     46
+  6 | +56986323808 | 2019-10-06 |       2 |     60
+  7 | +56921473302 | 2019-10-06 |       1 |     60
+  8 | +56921473303 | 2019-10-06 |       1 |     60
+  9 | +56921473304 | 2019-10-06 |       1 |     60
+ 10 | +56921473305 | 2019-10-06 |       1 |     60
+ 11 | +56986302803 | 2019-10-08 |       4 |     11
+ 12 | +56986302804 | 2019-10-08 |       4 |     12
+ 13 | +56986302805 | 2019-10-08 |       4 |      7
+ 14 | +56986302806 | 2019-10-08 |       4 |     16
+(14 filas)
+
+11)	 Crear un nuevo usuario.
+
+INSERT INTO users (first_name, email, last_name) VALUES ('pele', 'sua@gmail.com', 'Suares');
+SELECT * FROM users;
+
+call_list=# SELECT * FROM users;
+ id | first_name |        email         | last_name
+----+------------+----------------------+-----------
+  3 | Adel       | adel@gmail.com       | carrera
+  4 | Carlos     | carlos2@gmail.com    |
+  1 | Emerson    | emer_123_2@gmail.com | Perez
+  2 | Andrea     | chinla2@gmail.com    | laura
+  5 | Laura      | laura@gmail.com      | Jara
+  7 | pele       | sua@gmail.com        | Suares
+(7 filas)
+
+12)	 Seleccionar la cantidad de llamados de cada uno de los usuarios (nombre de usuario y cantidad de llamadas). 
+
+SELECT users.id, first_name, count(calls.id) FROM calls right JOIN users ON (users.id = calls.user_id) GROUP BY users.id;
+
+ id | first_name | count
+----+------------+-------
+  5 | Laura      |     0
+  4 | Carlos     |     4
+  6 | Pepe       |     0
+  2 | Andrea     |     6
+  7 | pele       |     0
+  1 | Emerson    |     4
+  3 | Adel       |     0
+(7 filas)
+
+
+13)	Obtener el usuario con mayor número de llamadas 
+
+SELECT users.id, first_name, count(calls.id) FROM calls right JOIN users ON (users.id = calls.user_id) GROUP BY users.id ORDER BY count(calls.id) DESC LIMIT 1;
+
+ id | first_name | count
+----+------------+-------
+  2 | Andrea     |     6
+(1 fila)
+
+14)	Seleccionar los llamados del usuario llamado Carlos ordenados por fecha en orden descendente. 
+SELECT * FROM calls WHERE (calls.user_id =4) ORDER BY date DESC;
+ 
+ id |    phone     |    date    | user_id | lenght
+----+--------------+------------+---------+--------
+ 11 | +56986302803 | 2019-10-08 |       4 |     11
+ 12 | +56986302804 | 2019-10-08 |       4 |     12
+ 13 | +56986302805 | 2019-10-08 |       4 |      7
+ 14 | +56986302806 | 2019-10-08 |       4 |     16
+(4 filas)
+
+
+15)	Mostrar el nombre del usuario que haya hecho la llamada más larga 
+
+SELECT users.id, first_name, max(calls.lenght) FROM calls LEFT JOIN users ON (users.id = calls.user_id) GROUP BY users.id ORDER BY max(calls.lenght) DESC LIMIT 1;
+
+ id | first_name | max
+----+------------+-----
+  2 | Andrea     | 130
+(1 fila)
+
+16)	Mostrar todos los usuarios junto con la suma total de largo de llamadas
+
+SELECT users.id, first_name, sum(calls.lenght) FROM calls LEFT JOIN users ON (users.id = calls.user_id) GROUP BY users.id ORDER BY sum(calls.lenght) DESC;
+ id | first_name | sum
+----+------------+-----
+  2 | Andrea     | 392
+  1 | Emerson    | 240
+  4 | Carlos     |  46
+(3 filas)
+
+ 
+17)	Mostrar todos los usuarios que hayan hecho menos de 5 llamadas. 
+
+SELECT users.id, first_name, count(calls.id) FROM calls right JOIN users ON (users.id = calls.user_id) GROUP BY users.id HAVING count(*) < 5;
+ id | first_name | count
+----+------------+-------
+  5 | Laura      |     0
+  4 | Carlos     |     4
+  6 | Pepe       |     0
+  7 | pele       |     0
+  1 | Emerson    |     4
+  3 | Adel       |     0
+(6 filas)
+
+18)	Nuevos cambios solicitados por cliente.
+Necesito agregar a la base una tabla de auditoría que registre el motivo del borrado de una llamada y el usuario que lo efectuó.
+
+CREATE TABLE auditoria ( id SERIAL PRIMARY KEY, motivo VARCHAR(150), user_id INTEGER REFERENCES users(id), call_id INTEGER REFERENCES calls(id));
+ id | motivo | user_id | call_id
+----+--------+---------+---------
+(0 filas)
+
+
+
+EMERSON ESPINOZA AGUIRRE
+
+
+
